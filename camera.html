@@ -1,0 +1,85 @@
+<html>
+<head>
+<meta charset="utf-8">
+<!-- https://blog.katsubemakito.net/html5/camera1 -->
+<title>Camera</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+</head>
+<body>
+<video id="camera" width="300" height="200"></video>
+<canvas id="picture" width="300" height="200"></canvas>
+<div id ="canvasarea">
+<canvas id="pic1" width="300" height="200"></canvas>
+<canvas id="pic2" width="300" height="200"></canvas>
+<canvas id="pic3" width="300" height="200"></canvas>
+<canvas id="pic4" width="300" height="200"></canvas>
+<canvas id="pic5" width="300" height="200"></canvas>
+</div>
+<form>
+    <button type="button" id="shutter">シャッター</button>
+    <button type="button" id="clear">全クリア</button>
+</form>
+<audio id="se" preload="auto">
+  <source src="camera-shutter1.mp3" type="audio/mp3">
+</audio>
+
+<script>
+window.onload = () => {
+  const video  = document.querySelector("#camera");
+  const canvas = document.querySelector("#picture");
+  const se     = document.querySelector('#se');
+
+// https://www.doraxdora.com/2019/07/04/post-9009/
+var getRGBASummary=function(){
+var canvas= document.querySelector("#picture");//$("#sign").get(0);
+var image=canvas.getContext("2d").getImageData(0,0,canvas.width,canvas.height);
+var data=image.data;
+var sum=data.reduce(function(prev,current,i,arr){return prev+current;});
+return sum;
+};
+  /** カメラ設定 */
+  const constraints = {
+    audio: false,
+    video: {
+      width: 300,
+      height: 200,
+      facingMode: "user"   // フロントカメラを利用する
+      // facingMode: { exact: "environment" }  // リアカメラを利用する場合
+    }
+  };
+
+  /**
+   * カメラを<video>と同期
+   */
+  navigator.mediaDevices.getUserMedia(constraints)
+  .then( (stream) => {
+    video.srcObject = stream;
+    video.onloadedmetadata = (e) => {
+      video.play();
+    };
+  })
+  .catch( (err) => {
+    console.log(err.name + ": " + err.message);
+  });
+
+  /**
+   * シャッターボタン
+   */
+   document.querySelector("#shutter").addEventListener("click", () => {
+    const ctx = canvas.getContext("2d");
+    console.log(getRGBASummary());
+    // 演出的な目的で一度映像を止めてSEを再生する
+    video.pause();  // 映像を停止
+//    se.play();      // シャッター音
+    setTimeout( () => {
+      video.play();    // 0.5秒後にカメラ再開
+    }, 500);
+
+    // canvasに画像を貼り付ける
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+  });
+};
+</script>
+</body>
+</html>
