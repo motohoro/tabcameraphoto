@@ -299,6 +299,9 @@ return true;
 };
 
 //ServiceWorker
+//僕の考えた最強のService Workerキャッシュ戦略で爆速サービスを作った - Qiita
+//https://qiita.com/tiwu_dev/items/47e8a7c3e6f2d57816d7
+/* 
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', function() {
         navigator.serviceWorker.register('/sw.js').then(() => {
@@ -308,3 +311,4 @@ if ('serviceWorker' in navigator) {
         });
     });
 }
+ */
