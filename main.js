@@ -156,7 +156,11 @@ window.onload = () => {
                     video.height = camerawidth_real
                     video.width = cameraheight_real
                 }
- */        let ret = orientationchangefunction()
+                
+ */
+                $("#log").html(consoleExt.result);
+
+                let ret = orientationchangefunction()
 
                 video.srcObject = stream;
                 video.onloadedmetadata = (e) => {
@@ -166,7 +170,6 @@ window.onload = () => {
             .catch((err) => {
                 console.log(err.name + ": " + err.message);
             });
-            $("#log").html(consoleExt.result);
 
     }
 
