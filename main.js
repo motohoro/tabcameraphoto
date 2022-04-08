@@ -260,8 +260,8 @@ window.onload = () => {
 
             $("#picture").attr("width", camerawidth_local);
             $("#picture").attr("height", cameraheight_local);
-            $(".imgs").attr("width", camerawidth_local);
-            $(".imgs").attr("height", cameraheight_local);
+            // $(".imgs").attr("width", camerawidth_local);
+            // $(".imgs").attr("height", cameraheight_local);
             $("#carouselarea").attr("width", camerawidth_local);
             $("#carouselarea").attr("height", cameraheight_local);
 
@@ -276,6 +276,8 @@ window.onload = () => {
             $("#picture").attr("width", camerawidth_local);
             // $(".imgs").attr("height",camerawidth);
             // $(".imgs").attr("width",cameraheight);
+            $("#carouselarea").attr("height", camerawidth_local);
+            $("#carouselarea").attr("width", cameraheight_local);
 
         }
         if (camerawidth > cameraheight) {
