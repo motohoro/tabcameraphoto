@@ -262,6 +262,9 @@ window.onload = () => {
             $("#picture").attr("height", cameraheight_local);
             $(".imgs").attr("width", camerawidth_local);
             $(".imgs").attr("height", cameraheight_local);
+            $("#carouselarea").attr("width", camerawidth_local);
+            $("#carouselarea").attr("height", cameraheight_local);
+
 
         }
         else {
