@@ -150,6 +150,8 @@ window.onload = () => {
                 video.width = camerawidth_real
                 const angle = orientCheck()
                 $("#deviceangle").html(angle + ":synccamera1");
+                $("#log").html(consoleExt.result);
+
 /*                 if(Math.abs(angle)===90){
     
                 }else{
@@ -158,7 +160,6 @@ window.onload = () => {
                 }
                 
  */
-                $("#log").html(consoleExt.result);
 
                 let ret = orientationchangefunction()
 
