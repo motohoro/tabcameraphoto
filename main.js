@@ -70,6 +70,7 @@ window.onload = () => {
         }
         console.log("screen:"+screenwidth+"="+ screenheight)
         console.log("camera:"+camerawidth+"="+cameraheight)
+        $("#log").html(consoleExt.result);
         SyncCamera()
 
 
@@ -165,6 +166,8 @@ window.onload = () => {
             .catch((err) => {
                 console.log(err.name + ": " + err.message);
             });
+            $("#log").html(consoleExt.result);
+
     }
 
     // SyncCamera();
@@ -294,9 +297,90 @@ return true;
 
     // $(window).trigger("orientationchange");
     //orientationchangefunction();
+    consoleExt.hook()
+    consoleExt.result = '';
+    consoleExt.logOutput = true;
+
     initfunc();
 
 };
+
+// https://qiita.com/k_ui/items/6f2ae599207fa9af323a#%E3%83%96%E3%83%A9%E3%82%A6%E3%82%B6%E4%BA%92%E6%8F%9B%E3%81%A8%E3%81%8B%E8%80%83%E3%81%88%E3%82%8B%E3%81%A8
+/*
+var methods = ['log', 'warn', 'error', 'info', 'debug', 'dir'];
+for (var i in methods){
+(function(m) {
+    if (console[m]) {
+    window[m] = console[m].bind(console);
+    } else {
+    window[m] = log;
+    }
+})(methods[i]);
+}
+*/
+
+// JavaScript console.log を書き換えて出力内容を横取りする。 - Qiita
+// https://qiita.com/standard-software/items/5636cc69970a5be00bc0
+
+var isObject = function(value) {
+    if (
+      (Object.prototype.toString.call(value) === '[object Object]')
+      && (!Array.isArray(value))
+      && (value !== null)
+      && (typeof value !== 'undefined')
+    ) {
+      return true;
+    }
+    return false;
+  };
+
+  //オブジェクトを文字列化する関数
+  //JSON.stringify を利用して
+  //  {valueA: 123, valueB: "123"}
+  //という形式の文字列を作成する
+  var objToString = function(obj) {
+    var items = JSON.stringify(obj).split(',');
+    items = items.map(function(element, index, array) {
+      return element.replace(/(.+:)(.*)/,
+        function(string, capture1, capture2) {
+          return capture1.replace(/\"/g, '') + capture2;
+        }).replace(/:/g, ': ');
+      //[:]の前後でcapture1/2に分割して、
+      //その後に[:]の前だけ["]を削除して
+      //[:]は[: ]に置換
+    });
+    return items.join(', ');
+    //[,]は[, ]に置換
+  };
+
+  var consoleExt = {};
+  consoleExt.originalConsoleLog = console.log;
+  consoleExt.result = '';
+  consoleExt.delimiter = ';';
+  consoleExt.logOutput = true;
+
+  consoleExt.log = function(message) {
+    if (consoleExt.logOutput) {
+      consoleExt.originalConsoleLog(message);
+    }
+    if (isObject(message)) {
+      consoleExt.result += objToString(message) + consoleExt.delimiter;
+    } else {
+      consoleExt.result += message + consoleExt.delimiter;
+    }
+  };
+
+  consoleExt.hook = function() {
+    if (consoleExt.originalConsoleLog === console.log) {
+      console.log = consoleExt.log;
+    }
+  };
+  consoleExt.unhook = function() {
+    if (consoleExt.originalConsoleLog !== console.log) {
+      console.log = consoleExt.originalConsoleLog;
+    }
+  };
+
 
 //ServiceWorker
 //僕の考えた最強のService Workerキャッシュ戦略で爆速サービスを作った - Qiita
